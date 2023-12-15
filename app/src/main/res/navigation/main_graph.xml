@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/main_graph" app:startDestination="@id/addressListFragment">
+
+    <fragment android:id="@+id/chatFragment" android:name="com.example.smsapp.presenter.chat.ChatFragment"
+              android:label="fragment_chat" tools:layout="@layout/fragment_chat">
+        <argument android:name="currentAddress" app:argType="com.example.smsapp.data.Address"/>
+    </fragment>
+    <fragment android:id="@+id/addressListFragment"
+              android:name="com.example.smsapp.presenter.address_list.AddressListFragment"
+              android:label="AddressListFragment">
+        <action android:id="@+id/action_addressListFragment_to_chatFragment" app:destination="@id/chatFragment"
+                app:enterAnim="@anim/slide_in_right" app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left" app:popExitAnim="@anim/slide_out_right">
+        </action>
+    </fragment>
+</navigation>
