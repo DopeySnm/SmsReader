@@ -15,5 +15,6 @@ enum class SenderType(val value: Int) {
 @Parcelize
 data class Message(
     val body: String,
-    val senderType: SenderType
+    val senderType: SenderType,
+    val date: Long
 ) : Parcelable

@@ -13,16 +13,16 @@ import kotlinx.coroutines.launch
 
 class SmsListViewModel : ViewModel() {
 
-    private val _chatMessageEntries = MutableLiveData<List<Address>>()
-    val chatMessageEntries: LiveData<List<Address>>
-        get() = _chatMessageEntries
+    private val _addressesLiveData = MutableLiveData<List<Address>>()
+    val addressesLiveData: LiveData<List<Address>>
+        get() = _addressesLiveData
 
     val filteredAddresses = MutableLiveData<List<Address>>()
 
     fun filterAddresses(query: String) {
         viewModelScope.launch {
             val filteredList = mutableListOf<Address>()
-            chatMessageEntries.value?.map {
+            addressesLiveData.value?.map {
                 if (it.name.contains(query, true)) filteredList.add(it)
             }
             filteredAddresses.postValue(filteredList)
@@ -44,16 +44,18 @@ class SmsListViewModel : ViewModel() {
             do {
                 val address = cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.ADDRESS))
                 val body = cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.BODY))
-                val typeSender = cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Sms.TYPE))
+                val typeSender = cursor.getInt(cursor.getColumnIndexOrThrow(Telephony.Sms.TYPE))
+                val date = cursor.getLong(cursor.getColumnIndexOrThrow(Telephony.Sms.DATE))
 
-                if (typeSender.toInt() != 2)
-                    if (typeSender.toInt() != 1)
+                if (typeSender != 2)
+                    if (typeSender != 1)
                         continue
 
                 if (address != null)
                     result.list.add(address to Message(
                         body,
-                        SenderType.getByValue(typeSender.toInt())
+                        SenderType.getByValue(typeSender),
+                        date
                     ))
 
             } while (cursor.moveToNext())
@@ -63,7 +65,7 @@ class SmsListViewModel : ViewModel() {
 
         val res = result.toSmsChatEntriesList()
 
-        _chatMessageEntries.postValue(res)
+        _addressesLiveData.postValue(res)
     }
 
 }
@@ -76,7 +78,9 @@ value class AddressAndMessageList(
         list
             .groupBy { it.first }
             .map {
-                val messages = it.value.map { it.second }
+                val messages = it.value.map {
+                    it.second
+                }
                 Address(it.key, messages)
             }
 }

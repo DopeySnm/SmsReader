@@ -1,4 +1,4 @@
-package com.example.smsapp.presenter
+package com.example.smsapp.presenter.address_list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

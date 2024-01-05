@@ -10,17 +10,17 @@ fun Fragment.requirePermission(
     successDelegate: () -> Unit,
     failureDelegate: () -> Unit,
 ) {
-    val permissionState = ContextCompat.checkSelfPermission( // вернёт числовое обозначение
+    val permissionState = ContextCompat.checkSelfPermission(
         this.requireContext(),
         permission
     )
-    if (permissionState != PackageManager.PERMISSION_GRANTED) // То есть если в системе не выдано
+    if (permissionState != PackageManager.PERMISSION_GRANTED)
         this.registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) {
-            if (it) successDelegate() // Permissions granted just now!!!
-            else failureDelegate() // Explain to user why app's functionality not working
+            if (it) successDelegate()
+            else failureDelegate()
             return@registerForActivityResult
         }.launch(permission)
-    else successDelegate() // permission already granted times ago
+    else successDelegate()
 }

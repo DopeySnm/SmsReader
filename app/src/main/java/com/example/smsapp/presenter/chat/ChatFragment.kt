@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.smsapp.R
 import com.example.smsapp.databinding.FragmentChatBinding
-import com.example.smsapp.presenter.ChatAdapter
 
 class ChatFragment : Fragment(R.layout.fragment_chat) {
     private val binding: FragmentChatBinding by viewBinding()
@@ -22,6 +21,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         super.onViewCreated(view, savedInstanceState)
 
         val currentAddress = args.value.currentAddress
+        binding.addressName.text = args.value.currentAddress.name
         adapter.submitList(currentAddress.messages)
 
         initializeRecycler()

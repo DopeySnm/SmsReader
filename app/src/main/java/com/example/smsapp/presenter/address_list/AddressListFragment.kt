@@ -1,7 +1,6 @@
 package com.example.smsapp.presenter.address_list
 
 import android.Manifest.permission.READ_SMS
-import android.icu.text.RelativeDateTimeFormatter.Direction
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
@@ -10,16 +9,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.appcompat.widget.SearchView.OnQueryTextListener
-import androidx.navigation.NavController
-import androidx.navigation.NavDirections
-import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.smsapp.R
 import com.example.smsapp.data.Address
 import com.example.smsapp.databinding.FragmentAddressListBinding
-import com.example.smsapp.presenter.AddressAdapter
-import com.example.smsapp.presenter.chat.ChatFragmentArgs
 import com.example.smsapp.requirePermission
 
 class AddressListFragment : Fragment(R.layout.fragment_address_list) {
@@ -37,7 +30,7 @@ class AddressListFragment : Fragment(R.layout.fragment_address_list) {
             adapter.submitList(it)
         }
 
-        viewModel.chatMessageEntries.observe(viewLifecycleOwner) {
+        viewModel.addressesLiveData.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
 
@@ -52,7 +45,7 @@ class AddressListFragment : Fragment(R.layout.fragment_address_list) {
                 viewModel.loadSmsMessages(requireContext().contentResolver)
             },
             failureDelegate = {
-                showFailureMessage(true)
+
             }
         )
     }
@@ -60,11 +53,6 @@ class AddressListFragment : Fragment(R.layout.fragment_address_list) {
     private fun initializeUI() {
         initializeSearch()
         initializeRecycler()
-        showFailureMessage(false)
-    }
-
-    private fun showFailureMessage(shown: Boolean) {
-        binding.recyclerViewAddress.visibility = if (shown) View.GONE else View.VISIBLE
     }
 
     private fun onChatItemClick(entry: Address) {

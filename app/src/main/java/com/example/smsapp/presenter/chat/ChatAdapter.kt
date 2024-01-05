@@ -1,5 +1,6 @@
-package com.example.smsapp.presenter
+package com.example.smsapp.presenter.chat
 
+import android.icu.text.SimpleDateFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +11,7 @@ import com.example.smsapp.data.SenderType
 import com.example.smsapp.databinding.SmsInboxItemBinding
 import com.example.smsapp.databinding.SmsOutboxItemBinding
 import java.lang.IllegalArgumentException
+import java.util.*
 
 class ChatAdapter : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
 
@@ -59,8 +61,11 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
             private val binding: SmsOutboxItemBinding
         ) : ChatViewHolder(binding) {
             fun bind(message: Message){
+                val date = Date(message.date)
+                val formatter = SimpleDateFormat("HH:mm")
+
                 binding.message.text = message.body
-                binding.timeMessage.text = "10:56 Am"
+                binding.time.text = formatter.format(date)
             }
         }
 
@@ -68,40 +73,13 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
             private val binding: SmsInboxItemBinding
         ) : ChatViewHolder(binding) {
             fun bind(message: Message){
+                val date = Date(message.date)
+                val formatter = SimpleDateFormat("HH:mm")
+
                 binding.message.text = message.body
-                binding.timeMessage.text = "10:56 Am"
+                binding.time.text = formatter.format(date)
             }
         }
 
     }
-
-
-//    private val list = mutableListOf<Message>()
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
-//        val layoutInflater = LayoutInflater.from(parent.context)
-//        val binding = SmsItemBinding.inflate(layoutInflater, parent, false)
-//        return ChatViewHolder(binding)
-//    }
-//
-//    fun submitList(list: List<Message>) = with(this.list) {
-//        clear()
-//        addAll(list)
-//        notifyDataSetChanged()
-//    }
-//
-//    override fun getItemCount(): Int {
-//        return list.size
-//    }
-//
-//    override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
-//        holder.bind(list[position])
-//    }
-//    class ChatViewHolder(
-//        private val binding_inbox: SmsItemBinding
-//    ) : RecyclerView.ViewHolder(binding_inbox.root){
-//        fun bind(message: String){
-//            binding_inbox.message.text = message
-//            binding_inbox.timeMessage.text = "10:56 Am"
-//        }
-//    }
 }
